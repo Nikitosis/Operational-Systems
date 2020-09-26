@@ -16,6 +16,5 @@ public class CalcRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer value;
-    private Duration waitingTime;
     private FuncType funcType;
 }

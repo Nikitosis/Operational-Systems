@@ -40,6 +40,8 @@ public class SocketServer {
 
             fSocket.close();
 
+            log.info("Socket closed");
+
             return response;
         });
     }

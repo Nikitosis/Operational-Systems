@@ -4,6 +4,7 @@ import com.client.service.SocketClient;
 import com.lab1.api.dto.CalcRequest;
 import com.lab1.api.dto.CalcResponse;
 import com.lab1.api.dto.FuncType;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
@@ -14,6 +15,7 @@ import spos.lab1.demo.IntOps;
 import java.util.concurrent.TimeUnit;
 
 @SpringBootApplication
+@Slf4j
 public class ClientApplication implements CommandLineRunner {
     @Value("${server.ip}")
     private String ip;
@@ -30,6 +32,7 @@ public class ClientApplication implements CommandLineRunner {
         SocketClient socketClient = new SocketClient(ip, port);
         socketClient.connect();
         CalcRequest calcRequest = socketClient.receiveMessage();
+        log.info("Received request={}", calcRequest);
 
         CalcResponse calcResponse = new CalcResponse();
 
@@ -40,8 +43,7 @@ public class ClientApplication implements CommandLineRunner {
             calcResponse.setValue(IntOps.funcG(calcRequest.getValue()));
         }
 
-        Thread.sleep(calcRequest.getWaitingTime().toMillis());
-
+        log.info("Sending response");
         socketClient.sendMessage(calcResponse);
 
         socketClient.close();
