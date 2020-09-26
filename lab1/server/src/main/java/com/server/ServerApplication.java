@@ -8,6 +8,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.time.Duration;
 import java.util.Calendar;
 import java.util.concurrent.Future;
 
@@ -27,13 +28,16 @@ public class ServerApplication implements CommandLineRunner {
     @Override
     public void run(String... args) throws Exception {
         CalcRequest calcRequest1 = CalcRequest.builder()
-                .value(12).waitingSecs(1).build();
+                .value(12).waitingTime(Duration.ofSeconds(2)).build();
         CalcRequest calcRequest2 = CalcRequest.builder()
-                .value(13).waitingSecs(2).build();
+                .value(13).waitingTime(Duration.ofSeconds(2)).build();
 
-        Future<CalcResponse> responseFuture = socketServer.getSocketResponse(calcRequest1);
+        Future<CalcResponse> fResponse = socketServer.getSocketResponse(calcRequest1);
+        Future<CalcResponse> gResponse = socketServer.getSocketResponse(calcRequest2);
 
-        responseFuture.get();
+
+        fResponse.get();
+        gResponse.get();
 
     }
 }

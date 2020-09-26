@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
+import java.time.Duration;
 
 @Data
 @Builder
@@ -15,5 +16,5 @@ public class CalcRequest implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private Integer value;
-    private Integer waitingSecs;
+    private Duration waitingTime;
 }

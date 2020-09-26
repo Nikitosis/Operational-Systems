@@ -29,7 +29,6 @@ public class SocketClient {
         log.info("Listening for message");
         ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
         CalcRequest request = (CalcRequest) in.readObject();
-        in.close();
 
         log.info("Message received={}", request);
 
@@ -40,7 +39,10 @@ public class SocketClient {
         log.info("Sending message={}", calcResponse);
         ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
         out.writeObject(calcResponse);
-        out.close();
         log.info("Message sent");
+    }
+
+    public void close() throws IOException {
+        socket.close();
     }
 }

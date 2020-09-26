@@ -46,12 +46,10 @@ public class SocketServer {
 
     private CalcResponse requestSocket(Socket socket, CalcRequest calcRequest) throws IOException, ClassNotFoundException {
             ObjectOutputStream out = new ObjectOutputStream(socket.getOutputStream());
-            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
             out.writeObject(calcRequest);
-            CalcResponse response = (CalcResponse) in.readObject();
 
-            out.close();
-            in.close();
+            ObjectInputStream in = new ObjectInputStream(socket.getInputStream());
+            CalcResponse response = (CalcResponse) in.readObject();
 
             return response;
     }

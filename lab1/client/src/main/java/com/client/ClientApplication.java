@@ -8,6 +8,8 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+import java.util.concurrent.TimeUnit;
+
 @SpringBootApplication
 public class ClientApplication implements CommandLineRunner {
     @Value("${server.ip}")
@@ -30,6 +32,10 @@ public class ClientApplication implements CommandLineRunner {
                 .value(calcRequest.getValue() * 2)
                 .build();
 
+        Thread.sleep(calcRequest.getWaitingTime().toMillis());
+
         socketClient.sendMessage(calcResponse);
+
+        socketClient.close();
     }
 }
