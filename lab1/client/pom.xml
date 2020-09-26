@@ -39,11 +39,39 @@
         </dependency>
 
         <dependency>
+            <groupId>spos.lab1</groupId>
+            <artifactId>demo</artifactId>
+            <scope>system</scope>
+            <version>1.0</version>
+            <systemPath>${basedir}/lib/lab1.jar</systemPath>
+        </dependency>
+
+        <dependency>
             <groupId>com.spos.lab1</groupId>
             <artifactId>api</artifactId>
             <version>${project.version}</version>
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <mainClass>com.client.ClientApplication</mainClass>
+                </configuration>
+
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>repackage</goal>
+                        </goals>
+                    </execution>
+                </executions>
+
+            </plugin>
+        </plugins>
+    </build>
 
 </project>

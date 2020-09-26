@@ -17,4 +17,5 @@ public class CalcRequest implements Serializable {
 
     private Integer value;
     private Duration waitingTime;
+    private FuncType funcType;
 }
