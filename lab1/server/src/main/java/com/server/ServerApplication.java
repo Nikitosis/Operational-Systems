@@ -151,6 +151,8 @@ public class ServerApplication implements CommandLineRunner {
                 } else {
                     consoleService.print("Can't get result. G is not responding");
                 }
+                consoleService.stopAllListeners();
+                consoleService.stopTimer();
             } catch (Exception e) {}
         };
 
