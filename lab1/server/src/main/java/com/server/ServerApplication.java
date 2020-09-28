@@ -156,6 +156,13 @@ public class ServerApplication implements CommandLineRunner {
             } catch (Exception e) {}
         };
 
+        Runnable continueAction = () -> {
+            consoleService.stopListening(KeyType.F1);
+            consoleService.stopListening(KeyType.F2);
+            consoleService.stopTimer();
+            consoleService.clear();
+        };
+
         Runnable escapeAction = () -> {
             try {
                 consoleService.showPropmt();
@@ -163,12 +170,7 @@ public class ServerApplication implements CommandLineRunner {
                 //on stop, stopAction
                 consoleService.startListening(stopAction, KeyType.F1);
                 //on continue, stop listening
-                consoleService.startListening(() -> {
-                    consoleService.stopListening(KeyType.F1);
-                    consoleService.stopListening(KeyType.F2);
-                    consoleService.stopTimer();
-                    consoleService.clear();
-                }, KeyType.F2);
+                consoleService.startListening(continueAction, KeyType.F2);
                 //15s timer
                 consoleService.startTimer(stopAction, 15000L);
             } catch (Exception e) {}

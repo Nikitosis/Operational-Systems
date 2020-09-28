@@ -65,6 +65,7 @@ public class ConsoleService {
                     monitor.wait(millsAm);
                 }
                 //after timer passed, action is run
+                log.info("Timer clocks");
                 action.run();
             } catch (InterruptedException e) {
                 e.printStackTrace();
