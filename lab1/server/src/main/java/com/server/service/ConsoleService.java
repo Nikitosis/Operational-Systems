@@ -6,18 +6,21 @@ import com.googlecode.lanterna.screen.TerminalScreen;
 import com.googlecode.lanterna.terminal.DefaultTerminalFactory;
 import com.googlecode.lanterna.terminal.Terminal;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
 
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 @Slf4j
+@Service
 public class ConsoleService {
     private Terminal terminal;
     private Screen screen;
-    private Map<KeyType, Runnable> keyActions = new HashMap<>();
+    private Map<KeyType, Runnable> keyActions = new ConcurrentHashMap<>();
     private Thread keyListener;
     private Thread timerThread;
 
@@ -68,7 +71,6 @@ public class ConsoleService {
                 log.info("Timer clocks");
                 action.run();
             } catch (InterruptedException e) {
-                e.printStackTrace();
             }
         });
         timerThread.start();

@@ -19,8 +19,6 @@ import java.util.concurrent.Future;
 public class SocketServer {
     private final ServerSocket serverSocket;
 
-    private Socket fSocket;
-    private Socket gSocket;
     private ExecutorService executorService;
 
     public SocketServer(ServerSocket serverSocket) {
@@ -31,14 +29,14 @@ public class SocketServer {
     public Future<CalcResponse> getSocketResponse(CalcRequest calcRequest) throws IOException {
         return executorService.submit(() -> {
             log.info("Trying to obtain connection with socket");
-            Socket fSocket = serverSocket.accept();
+            Socket socket = serverSocket.accept();
             log.info("Connection with socket obtained");
 
             log.info("Sending message={}", calcRequest);
-            CalcResponse response = requestSocket(fSocket, calcRequest);
+            CalcResponse response = requestSocket(socket, calcRequest);
             log.info("Received response={}", response);
 
-            fSocket.close();
+            socket.close();
 
             log.info("Socket closed");
 

@@ -6,27 +6,36 @@ import com.lab1.api.dto.CalcResponse;
 import com.lab1.api.dto.FuncType;
 import com.server.service.ConsoleService;
 import com.server.service.SocketServer;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
+import java.io.IOException;
 import java.time.Duration;
 import java.util.concurrent.Future;
 
 @SpringBootApplication
 @Slf4j
+@RequiredArgsConstructor
 public class ServerApplication implements CommandLineRunner {
     private final SocketServer socketServer;
 
-    private ConsoleService consoleService;
+    private final ConsoleService consoleService;
 
-    @Autowired
-    public ServerApplication(SocketServer socketServer) {
-        this.socketServer = socketServer;
-    }
+    @Value("${value}")
+    private Integer value;
+
+    @Value("${fPath}")
+    private String fPath;
+
+    @Value("${gPath}")
+    private String gPath;
 
     public static void main(String[] args) {
         SpringApplicationBuilder builder = new SpringApplicationBuilder(ServerApplication.class);
@@ -38,30 +47,26 @@ public class ServerApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
-        consoleService = new ConsoleService();
-        consoleService.print("Press enter if you are ready to start");
-        consoleService.startListening(() -> {
-            try {
-                consoleService.clear();
-                consoleService.stopListening(KeyType.Enter);
-                startExecution_SecondCancelation();
-            } catch (Exception e) {}
-        }, KeyType.Enter);
-    }
-
-    void startExecution_FirstCancelation() throws Exception{
         CalcRequest calcRequest1 = CalcRequest.builder()
-                .value(5)
-                .funcType(FuncType.F)
+                .value(value)
                 .build();
         CalcRequest calcRequest2 = CalcRequest.builder()
-                .value(5)
-                .funcType(FuncType.G)
+                .value(value)
                 .build();
 
-        Future<CalcResponse> fResponseFuture = socketServer.getSocketResponse(calcRequest1);
-        Future<CalcResponse> gResponseFuture = socketServer.getSocketResponse(calcRequest2);
+        ProcessBuilder processBuilderF = new ProcessBuilder("java", "-jar", fPath, "--server.ip=127.0.0.1", "--server.port=9001");
+        ProcessBuilder processBuilderG = new ProcessBuilder("java", "-jar", gPath, "--server.ip=127.0.0.1", "--server.port=9001");
 
+        Future<CalcResponse> fResponseFuture = socketServer.getSocketResponse(calcRequest1);
+        Process funcF = processBuilderF.start();
+
+        Future<CalcResponse> gResponseFuture = socketServer.getSocketResponse(calcRequest2);
+        Process funcG = processBuilderG.start();
+
+        startExecution_SecondCancelation(fResponseFuture, gResponseFuture);
+    }
+
+    void startExecution_FirstCancelation(Future<CalcResponse> fResponseFuture,  Future<CalcResponse> gResponseFuture ) throws Exception{
         Runnable stopAction = () -> {
             try {
                 CalcResponse fResponse = null;
@@ -117,19 +122,7 @@ public class ServerApplication implements CommandLineRunner {
         log.info("Finishing server execution");
     }
 
-    void startExecution_SecondCancelation() throws Exception{
-        CalcRequest calcRequest1 = CalcRequest.builder()
-                .value(5)
-                .funcType(FuncType.F)
-                .build();
-        CalcRequest calcRequest2 = CalcRequest.builder()
-                .value(5)
-                .funcType(FuncType.G)
-                .build();
-
-        Future<CalcResponse> fResponseFuture = socketServer.getSocketResponse(calcRequest1);
-        Future<CalcResponse> gResponseFuture = socketServer.getSocketResponse(calcRequest2);
-
+    void startExecution_SecondCancelation(Future<CalcResponse> fResponseFuture,  Future<CalcResponse> gResponseFuture ) throws Exception{
         Runnable stopAction = () -> {
             try {
                 CalcResponse fResponse = null;

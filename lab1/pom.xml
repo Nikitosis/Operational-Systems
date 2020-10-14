@@ -17,7 +17,8 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>server</module>
-        <module>client</module>
+        <module>client_f</module>
+        <module>client_g</module>
         <module>api</module>
     </modules>
 

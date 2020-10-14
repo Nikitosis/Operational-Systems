@@ -29,6 +29,7 @@ public class ClientApplication implements CommandLineRunner {
 
     @Override
     public void run(String... args) throws Exception {
+        log.info("Starting");
         SocketClient socketClient = new SocketClient(ip, port);
         socketClient.connect();
         CalcRequest calcRequest = socketClient.receiveMessage();
@@ -37,11 +38,7 @@ public class ClientApplication implements CommandLineRunner {
         CalcResponse calcResponse = new CalcResponse();
 
         //calculate response regarding to function type
-        if(FuncType.F.equals(calcRequest.getFuncType())) {
-            calcResponse.setValue(IntOps.funcF(calcRequest.getValue()));
-        } else {
-            calcResponse.setValue(IntOps.funcG(calcRequest.getValue()));
-        }
+        calcResponse.setValue(IntOps.funcF(calcRequest.getValue()));
 
         log.info("Sending response");
         socketClient.sendMessage(calcResponse);

@@ -10,7 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <packaging>jar</packaging>
 
-    <artifactId>client</artifactId>
+    <artifactId>client_g</artifactId>
 
     <dependencies>
         <!-- https://mvnrepository.com/artifact/org.projectlombok/lombok -->
@@ -40,10 +40,8 @@
 
         <dependency>
             <groupId>spos.lab1</groupId>
-            <artifactId>demo</artifactId>
-            <scope>system</scope>
+            <artifactId>lab1</artifactId>
             <version>1.0</version>
-            <systemPath>${basedir}/lib/lab1.jar</systemPath>
         </dependency>
 
         <dependency>
