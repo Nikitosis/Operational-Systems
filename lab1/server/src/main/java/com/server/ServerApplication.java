@@ -17,6 +17,7 @@ import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.context.ConfigurableApplicationContext;
 
 import java.io.IOException;
+import java.net.Socket;
 import java.time.Duration;
 import java.util.concurrent.Future;
 
@@ -55,13 +56,18 @@ public class ServerApplication implements CommandLineRunner {
                 .build();
 
         ProcessBuilder processBuilderF = new ProcessBuilder("java", "-jar", fPath, "--server.ip=127.0.0.1", "--server.port=9001");
-        ProcessBuilder processBuilderG = new ProcessBuilder("java", "-jar", gPath, "--server.ip=127.0.0.1", "--server.port=9001");
-
-        Future<CalcResponse> fResponseFuture = socketServer.getSocketResponse(calcRequest1);
         Process funcF = processBuilderF.start();
+        Socket fSocket = socketServer.connect();
 
-        Future<CalcResponse> gResponseFuture = socketServer.getSocketResponse(calcRequest2);
+        Thread.sleep(2000);
+
+        ProcessBuilder processBuilderG = new ProcessBuilder("java", "-jar", gPath, "--server.ip=127.0.0.1", "--server.port=9001");
         Process funcG = processBuilderG.start();
+        Socket gSocket = socketServer.connect();
+
+        Future<CalcResponse> fResponseFuture = socketServer.getSocketResponse(fSocket, calcRequest1);
+
+        Future<CalcResponse> gResponseFuture = socketServer.getSocketResponse(gSocket, calcRequest2);
 
         startExecution_SecondCancelation(fResponseFuture, gResponseFuture);
     }

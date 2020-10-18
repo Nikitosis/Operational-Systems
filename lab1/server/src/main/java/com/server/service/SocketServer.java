@@ -26,12 +26,15 @@ public class SocketServer {
         executorService = Executors.newFixedThreadPool(2);
     }
 
-    public Future<CalcResponse> getSocketResponse(CalcRequest calcRequest) throws IOException {
-        return executorService.submit(() -> {
-            log.info("Trying to obtain connection with socket");
-            Socket socket = serverSocket.accept();
-            log.info("Connection with socket obtained");
+    public Socket connect() throws IOException {
+        log.info("Trying to obtain connection with socket");
+        Socket socket = serverSocket.accept();
+        log.info("Connection with socket obtained");
+        return socket;
+    }
 
+    public Future<CalcResponse> getSocketResponse(Socket socket, CalcRequest calcRequest) throws IOException {
+        return executorService.submit(() -> {
             log.info("Sending message={}", calcRequest);
             CalcResponse response = requestSocket(socket, calcRequest);
             log.info("Received response={}", response);
