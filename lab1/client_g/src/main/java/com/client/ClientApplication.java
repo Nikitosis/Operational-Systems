@@ -38,11 +38,35 @@ public class ClientApplication implements CommandLineRunner {
         CalcResponse calcResponse = new CalcResponse();
 
         //calculate response regarding to function type
-        calcResponse.setValue(IntOps.funcG(calcRequest.getValue()));
+        calcResponse.setValue(funcG(calcRequest.getValue()));
 
         log.info("Sending response");
         socketClient.sendMessage(calcResponse);
 
         socketClient.close();
+    }
+
+    private Integer funcG(int value) {
+        try {
+            if (value == 0) {
+                Thread.sleep(3000);
+            } else if(value == 1) {
+                Thread.sleep(1000);
+            } else if(value == 2) {
+                wait();
+            } else if(value == 3) {
+                Thread.sleep(1000);
+                return 0;
+            } else if(value == 4) {
+                wait();
+            } else if(value == 5) {
+                Thread.sleep(1000);
+            } else {
+                wait();
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+        return 5;
     }
 }
