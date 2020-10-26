@@ -54,6 +54,7 @@ public class ClientApplication implements CommandLineRunner {
                 Thread.sleep(3000);
             } else if(value == 2) {
                 Thread.sleep(1000);
+                return 0;
             } else if(value == 3) {
                 wait();
             } else if(value == 4) {
