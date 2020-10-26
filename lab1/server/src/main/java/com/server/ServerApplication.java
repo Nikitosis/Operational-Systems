@@ -70,6 +70,9 @@ public class ServerApplication implements CommandLineRunner {
         Future<CalcResponse> gResponseFuture = socketServer.getSocketResponse(gSocket, calcRequest2);
 
         startExecution_SecondCancelation(fResponseFuture, gResponseFuture);
+
+        funcF.destroy();
+        funcG.destroy();
     }
 
     void startExecution_FirstCancelation(Future<CalcResponse> fResponseFuture,  Future<CalcResponse> gResponseFuture ) throws Exception{
